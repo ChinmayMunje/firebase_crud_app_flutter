@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_crud_app_flutter/sqlite_crud/sqlite_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class UpdateCoursePage extends StatefulWidget {
-  final String id;
+class UpdateCourseSQLitePage extends StatefulWidget {
+  final int id;
   final String orgCourseName;
   final String orgCourseImg;
   final String orgCourseDesc;
@@ -11,7 +11,7 @@ class UpdateCoursePage extends StatefulWidget {
   final String orgCoursePrice;
   final String orgCourseLink;
 
-  UpdateCoursePage(
+  UpdateCourseSQLitePage(
       {Key key,
       this.id,
       this.orgCourseName,
@@ -23,12 +23,10 @@ class UpdateCoursePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _UpdateCoursePageState createState() => _UpdateCoursePageState();
+  _UpdateCourseSQLitePageState createState() => _UpdateCourseSQLitePageState();
 }
 
-class _UpdateCoursePageState extends State<UpdateCoursePage> {
-  final _formKey = GlobalKey<FormState>();
-
+class _UpdateCourseSQLitePageState extends State<UpdateCourseSQLitePage> {
   var courseName = "";
   var courseImgUrl = "";
   var courseDesc = "";
@@ -65,9 +63,6 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
     courseLinkController.clear();
   }
 
-  CollectionReference courses =
-      FirebaseFirestore.instance.collection('courses');
-
   displayMessage(message) {
     Fluttertoast.showToast(
         msg: message,
@@ -76,31 +71,19 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
         timeInSecForIos: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white);
-    Navigator.pop(context);
+    Navigator.pop(context,true);
   }
 
-  Future<void> updateCourse(id, courseName, courseDesc, courseDuration,
-      coursePrice, courseImg, courseLink) {
-    return courses
-        .doc(id)
-        .update({
-          'courseName': courseName,
-          'courseDesc': "courseDesc",
-          'courseDuration': courseDuration,
-          "coursePrice": coursePrice,
-          "courseImg": courseImg,
-          "courseLink": courseLink
-        })
-        .then((value) => displayMessage('Course Updated..'))
-        .catchError((error) => displayMessage('Fail to update Course'));
+  Future<void> updateCourse(int id, String courseName, String courseImg,
+      String courseDuration, String coursePrice, String courseLink) async {
+    await SQLHelper.updateCourse(
+        id, courseName, courseImg, courseDuration, coursePrice, courseLink);
+    displayMessage('Course Updated..');
   }
 
-  Future<void> deleteCourse(id) {
-    return courses
-        .doc(id)
-        .delete()
-        .then((value) => displayMessage('Course Deleted..'))
-        .catchError((error) => displayMessage('Fail to delete Course'));
+  Future<void> deleteCourse(int id) async {
+    await SQLHelper.deleteCourse(id);
+    displayMessage('Course Deleted..');
   }
 
   @override
@@ -193,39 +176,6 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
               SizedBox(
                 height: 5,
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     autofocus: false,
-              //     style: TextStyle(color: Colors.white),
-              //     decoration: InputDecoration(
-              //       labelText: 'Course Description',
-              //       labelStyle: TextStyle(fontSize: 15.0, color: Colors.white),
-              //       border: OutlineInputBorder(
-              //           borderSide: BorderSide(
-              //         color: Colors.white,
-              //         width: 1.0,
-              //       )),
-              //       enabledBorder: OutlineInputBorder(
-              //           borderSide: BorderSide(
-              //         color: Colors.white,
-              //         width: 1.0,
-              //       )),
-              //       errorStyle:
-              //           TextStyle(color: Colors.redAccent, fontSize: 15),
-              //     ),
-              //     controller: courseDescController,
-              //     validator: (value) {
-              //       if (value == null || value.isEmpty) {
-              //         return 'Please enter Course Description';
-              //       }
-              //       return null;
-              //     },
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 5,
-              // ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -332,7 +282,8 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.white30),
+                        style:
+                            ElevatedButton.styleFrom(primary: Colors.white30),
                         onPressed: () {
                           setState(() {
                             courseName = courseNameController.text;
@@ -341,14 +292,8 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
                             coursePrice = coursePriceController.text;
                             courseDuration = courseDurationController.text;
                             courseLink = courseLinkController.text;
-                            updateCourse(
-                                widget.id,
-                                courseName,
-                                courseDesc,
-                                courseDuration,
-                                coursePrice,
-                                courseImgUrl,
-                                courseLink);
+                            updateCourse(widget.id, courseName, courseImgUrl,
+                                courseDuration, coursePrice, courseLink);
                             clearText();
                           });
                         },
@@ -360,7 +305,8 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.white30),
+                        style:
+                            ElevatedButton.styleFrom(primary: Colors.white30),
                         onPressed: () {
                           setState(() {
                             courseName = courseNameController.text;
@@ -380,7 +326,9 @@ class _UpdateCoursePageState extends State<UpdateCoursePage> {
                   )
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
             ],
           ),
         ),

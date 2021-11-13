@@ -176,53 +176,6 @@ class DataCard extends StatelessWidget {
           ],
         ),
 
-        // child: Column(
-        //   children: [
-        //     Image.network(
-        //       courseImg,
-        //       fit: BoxFit.cover,
-        //       height: 100,
-        //     ),
-        //     SizedBox(
-        //       height: 5,
-        //     ),
-        //     Row(
-        //       children: [
-        //         Container(
-        //             width: 200,
-        //             child: Text(
-        //               "Course Name : "+courseName,
-        //               maxLines: 3,
-        //               textAlign: TextAlign.center,
-        //             )),
-        //         Container(
-        //             width: 50,
-        //             child: Text(
-        //               coursePrice,
-        //               maxLines: 1,
-        //               textAlign: TextAlign.center,
-        //             )),
-        //       ],
-        //     ),
-        //     Text(
-        //       courseDesc,
-        //       textAlign: TextAlign.center,
-        //     ),
-        //     Row(
-        //       children: [
-        //         Container(
-        //           width: 50,
-        //           child: Text(
-        //             courseDuration,
-        //             maxLines: 1,
-        //             textAlign: TextAlign.center,
-        //           ),
-        //         ),
-        //         ElevatedButton(onPressed: () {}, child: Text('Enroll Now')),
-        //       ],
-        //     )
-        //   ],
-        // ),
       ),
     );
   }
