@@ -29,14 +29,7 @@ class _FacebookAuthState extends State<FacebookAuth> {
           name = profile['first_name'];
           image = profile['picture']['data']['url'];
         });
-        print('''
-         Logged in!
-         Token: ${accessToken.token}
-         User id: ${accessToken.userId}
-         Expires: ${accessToken.expires}
-         Permissions: ${accessToken.permissions}
-         Declined permissions: ${accessToken.declinedPermissions}
-         ''');
+        print("User Logged in!");
         break;
       case FacebookLoginStatus.cancelledByUser:
         print('Login cancelled by the user.');
@@ -59,15 +52,6 @@ class _FacebookAuthState extends State<FacebookAuth> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Facebook Authentication'),
-        // actions: [
-        //   ElevatedButton(
-        //     child: Text(
-        //       'Login',
-        //       style: TextStyle(color: Colors.white),
-        //     ),
-        //     onPressed: () {},
-        //   )
-        // ],
       ),
       body: Center(
           child: Column(
